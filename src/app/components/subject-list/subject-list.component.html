@@ -1,0 +1,6 @@
+<h2>Student List</h2>
+<ul>
+  <li *ngFor="let subject of subjects">
+    {{ subject.Id || 'No Id' }} - Name: {{ subject.Name || 'No name' }}
+  </li>
+</ul>
