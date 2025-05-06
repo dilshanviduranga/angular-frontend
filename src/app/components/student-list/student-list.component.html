@@ -1,6 +1,6 @@
 <h2>Student List</h2>
 <ul>
   <li *ngFor="let student of students">
-    {{ student.name || 'No name' }} - Age: {{ student.age || 'N/A' }} - DOB: {{ student.dob || 'N/A' }} - Address: {{ student.address || 'N/A' }}
+    <div>{{ student.name || 'No name' }}</div> - Age: {{ student.age || 'N/A' }} - DOB: {{ student.dob || 'N/A' }} - Address: {{ student.address || 'N/A' }}
   </li>
 </ul>

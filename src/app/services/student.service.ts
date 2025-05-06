@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class StudentService {
-  private apiUrl = 'https://localhost:7067/api/subject';  // Use your HTTPS port
+  private apiUrl = 'https://localhost:7067/api/student';
 
   constructor(private http: HttpClient) {}
 

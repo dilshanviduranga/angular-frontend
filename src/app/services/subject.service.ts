@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 
 @Injectable({
@@ -11,13 +11,11 @@ export class SubjectService {
   constructor(private http: HttpClient) {}
 
   getSubjects(): Observable<any> {
-      return this.http.get(this.apiUrl).pipe(
-          map((response: any) => response.data)
-      );
+    return this.http.get(this.apiUrl);
   }
   
   
-    getSubject(id: number): Observable<any> {
-      return this.http.get(`${this.apiUrl}/${id}`);
-    }
+  getSubject(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
 }
