@@ -3,8 +3,6 @@ import { StudentListComponent } from './components/student-list/student-list.com
 import { SubjectListComponent } from './components/subject-list/subject-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { StudentSubjectListComponent } from './components/student-subject-list/student-subject-list.component';
-import { StudentAddComponent } from './components/student-add/student-add.component';
-import { SubjectAddComponent } from './components/subject-add/subject-add.component';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +10,7 @@ import { SubjectAddComponent } from './components/subject-add/subject-add.compon
   imports: [HttpClientModule,
             StudentListComponent, 
             SubjectListComponent, 
-            StudentSubjectListComponent,
-            StudentAddComponent,
-            SubjectAddComponent],
+            StudentSubjectListComponent],
   templateUrl: './app.component.html'
 })
 export class AppComponent {}

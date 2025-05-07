@@ -1,3 +1,18 @@
+<h2>Add Student Subject</h2>
+<form (ngSubmit)="addStudentSubject()">
+    <div style="display: flex; justify-content: center; width: 100%;">
+    <div>
+        <label>Student Name:</label>
+        <input [(ngModel)]="studentName" name="name" required>
+    </div>
+    <div>
+      <label>Subject Name:</label>
+      <input [(ngModel)]="subjectName" name="name" required>
+  </div>
+        <button type="submit">Add</button>  
+    </div>
+</form>
+
 <ul>
     <li *ngFor="let studentSubject of studentSubjects">
       <div>
