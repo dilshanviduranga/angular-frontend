@@ -1,0 +1,23 @@
+<h2>Add Student</h2>
+<form (ngSubmit)="addStudent()">
+    <div style="display: flex; justify-content: center; width: 100%;">
+    <div>
+        <label>Name:</label>
+        <input [(ngModel)]="newStudent.name" name="name" required>
+    </div>
+    <div>
+        <label>Age:</label> 
+        <input [(ngModel)]="newStudent.age" name="age" type="number" required>  
+    </div>
+    <div>
+        <label>DOB:</label> 
+        <input [(ngModel)]="newStudent.dob" name="dob" type="date" required>    
+    </div>
+    <div>
+        <label>Address:</label> 
+        <input [(ngModel)]="newStudent.address" name="address" required>    
+    </div>
+    
+        <button type="submit">Add</button>  
+    </div>
+</form>

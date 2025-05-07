@@ -1,0 +1,8 @@
+<ul>
+    <li *ngFor="let studentSubject of studentSubjects">
+      <div>
+        <span style="margin-right: 20px;"><strong>Student ID:</strong> {{ studentSubject.studentName || 'No student ID' }}</span>
+        <span><strong>Subject ID:</strong> {{ studentSubject.subjectName || 'No subject ID' }}</span>
+      </div>
+    </li>
+  </ul>
