@@ -15,8 +15,8 @@
 <ul>
   <li *ngFor="let studentSubject of studentSubjects">
     <div *ngIf="editingStudentSubjectId !== studentSubject.id">
-      <span style="margin-right: 10px;"><strong>Student:</strong> {{ studentSubject.studentName || 'No student' }}</span>
-      <span><strong>Subject:</strong> {{ studentSubject.subjectName || 'No subject' }}</span>
+      <span style="margin-right: 15px;"><strong>Student:</strong> {{ studentSubject.studentName || 'No student' }}</span>
+      <span style="margin-right: 10px;"><strong>Subject:</strong> {{ studentSubject.subjectName || 'No subject' }}</span>
       <button (click)="startEdit(studentSubject)">Edit</button>
       <button (click)="deleteStudentSubject(studentSubject.id)">Delete</button>
     </div>
