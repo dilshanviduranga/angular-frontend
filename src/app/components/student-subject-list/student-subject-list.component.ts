@@ -17,6 +17,7 @@ export class StudentSubjectListComponent {
   newStudentSubject: StudentSubject = { studentId: 0, subjectId: 0}
   studentName : string = "";
   subjectName : string = "";
+  editingStudentSubjectId: number | null = null;
   
     constructor(private studentSubjectService: StudentsubjectService) {}
   
@@ -103,4 +104,43 @@ export class StudentSubjectListComponent {
         }
       });
     }
+
+
+
+
+
+
+
+
+
+
+    startEdit(studentSubject: any): void {
+      this.editingStudentSubjectId = studentSubject.id;
+    }
+    
+    cancelEdit(): void {
+      this.editingStudentSubjectId = null;
+    }
+    
+    saveEdit(studentSubject: any): void {
+      // You probably want to send the studentId and subjectId (not just names)
+      const updatedStudentSubject = {
+        id: studentSubject.id,
+        studentName: studentSubject.studentName,  // You may need to look these up by name
+        subjectName: studentSubject.subjectName
+      };
+    
+      this.studentSubjectService.updateStudentSubject(studentSubject.id, updatedStudentSubject).subscribe({
+        next: () => {
+          alert('Student-Subject updated successfully.');
+          this.editingStudentSubjectId = null;
+        },
+        error: (err: any) => {
+          console.log(studentSubject.id +"heeeeeee"+ updatedStudentSubject.studentName +" eeeeeh"+updatedStudentSubject.subjectName);
+          console.error('Failed to update student-subject:', err);
+          alert('Failed to update student-subject.');
+        }
+      });
+    }
+    
 }

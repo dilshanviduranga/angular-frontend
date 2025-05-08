@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class SubjectListComponent implements OnInit {
   subjects: any[] = [];
   newSubject: Subject = { subjectName: '' };
+  editingSubjectId: number | null = null;
 
   constructor(private subjectService: SubjectService) {}
 
@@ -65,5 +66,39 @@ export class SubjectListComponent implements OnInit {
         }
       });
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    startEdit(subject: any): void {
+      this.editingSubjectId = subject.id;
+    }
+    
+    cancelEdit(): void {
+      this.editingSubjectId = null;
+    }
+    
+    saveEdit(subject: any): void {
+      this.subjectService.updateSubject(subject.id, subject).subscribe({
+        next: () => {
+          alert('Subject updated successfully.');
+          this.editingSubjectId = null;  // Exit edit mode
+        },
+        error: (err: any) => {
+          console.log(subject.id +"ffffffff"+subject.subjectName);
+          console.error('Failed to update subject:', err);
+          alert('Failed to update subject.');
+        }
+      });
+    }
+    
 
 }

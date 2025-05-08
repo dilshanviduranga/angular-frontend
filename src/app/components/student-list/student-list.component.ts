@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 export class StudentListComponent implements OnInit {
   students: any[] = [];
   newStudent: Student = { name: '', age: 0, dob: new Date(), address: '' };
+  editingStudentId: number | null = null;  
 
   constructor(private studentService: StudentService) {}
 
@@ -65,4 +66,26 @@ export class StudentListComponent implements OnInit {
       }
     });
   }
+
+  startEdit(student: any): void {
+    this.editingStudentId = student.id;
+  }
+  
+  cancelEdit(): void {
+    this.editingStudentId = null;
+  }
+  
+  saveEdit(student: any): void {
+    this.studentService.updateStudent(student.id, student).subscribe({
+      next: () => {
+        alert('Student updated successfully.');
+        this.editingStudentId = null;  // Exit edit mode
+      },
+      error: (err: any) => {
+        console.error('Failed to update student:', err);
+        alert('Failed to update student.');
+      }
+    });
+  }
+  
 }

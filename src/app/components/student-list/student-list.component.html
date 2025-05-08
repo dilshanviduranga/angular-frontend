@@ -1,4 +1,3 @@
-<h2>Add Student</h2>
 <form (ngSubmit)="addStudent()">
     <div style="display: flex; justify-content: center; width: 100%;">
     <div>
@@ -24,8 +23,23 @@
 
 
 <ul>
-  <li *ngFor="let student of students">
-    <div>{{ student.name || 'No name' }}</div> - Age: {{ student.age || 'N/A' }} - DOB: {{ student.dob || 'N/A' }} - Address: {{ student.address || 'N/A' }}
-    <button (click)="deleteStudent(student.id)">Delete</button>
-  </li>
+    <li *ngFor="let student of students">
+      <div *ngIf="editingStudentId !== student.id">
+        {{ student.name || 'No name' }} -
+        Age: {{ student.age || 'N/A' }} -
+        DOB: {{ student.dob || 'N/A' }} -
+        Address: {{ student.address || 'N/A' }}
+        <button (click)="startEdit(student)">Edit</button>
+        <button (click)="deleteStudent(student.id)">Delete</button>
+      </div>
+  
+      <div *ngIf="editingStudentId === student.id">
+        <input [(ngModel)]="student.name" placeholder="Name" name="name">
+        <input type="number" [(ngModel)]="student.age" placeholder="Age" name="age">
+        <input type="date" [(ngModel)]="student.dob" placeholder="DOB" name="dob">
+        <input [(ngModel)]="student.address" placeholder="Address" name="address">
+        <button (click)="saveEdit(student)">Save</button>
+        <button (click)="cancelEdit()">Cancel</button>
+      </div>
+    </li>
 </ul>

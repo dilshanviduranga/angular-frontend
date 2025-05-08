@@ -40,4 +40,9 @@ export class StudentsubjectService {
     deleteStudentSubject(studentSubjectId: number){
       return this.http.delete(`${this.apiUrl}/delete/${studentSubjectId}`)
     }
+
+    updateStudentSubject(id: number, updatedStudentSubject: any): Observable<any> {
+      return this.http.put(`${this.apiUrl}/update/${id}`, updatedStudentSubject);
+    }
+    
 }
