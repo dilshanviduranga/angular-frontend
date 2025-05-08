@@ -45,7 +45,24 @@ export class StudentListComponent implements OnInit {
         alert("Failed to add student: " + err.message);
       }
     });
+  }
 
+  deleteStudent(studentId: number){
+    console.log("Delete button pressed................"+studentId);
+    if (!confirm('Are you sure you want to delete this student?')) {
+      return;
+    }
 
+    this.studentService.deleteStudent(studentId).subscribe({
+      next: () => {
+        alert('Student deleted successfully.');
+        this.loadStudents(); 
+        
+      },
+      error: (err) => {
+        console.error('Failed to delete student:', err);
+        alert('Failed to delete student.');
+      }
+    });
   }
 }

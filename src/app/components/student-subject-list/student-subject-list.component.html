@@ -18,6 +18,8 @@
       <div>
         <span style="margin-right: 20px;"><strong>Student ID:</strong> {{ studentSubject.studentName || 'No student ID' }}</span>
         <span><strong>Subject ID:</strong> {{ studentSubject.subjectName || 'No subject ID' }}</span>
+        <span><strong>Subject ID:</strong> {{ studentSubject.id || 'No subject ID' }}</span>
+        <button (click)="deleteStudentSubject(studentSubject.id)">Delete</button>
       </div>
     </li>
   </ul>

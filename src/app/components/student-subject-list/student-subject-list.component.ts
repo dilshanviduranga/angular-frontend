@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { StudentSubject, StudentsubjectService } from '../../services/studentsubject.service';
 import { FormsModule } from '@angular/forms';
+import { catchError, forkJoin, of } from 'rxjs';
 // import { ConsoleReporter } from 'jasmine';
 
 @Component({
@@ -32,50 +33,73 @@ export class StudentSubjectListComponent {
       });
     }
 
+
     addStudentSubject(): void {
       if (!this.subjectName.trim() || !this.studentName.trim()) {
         alert("All fields are required...");
         return;
       }
-
-      let studentIdd: number =0;
-
-      this.studentSubjectService.getStudentId(this.studentName).subscribe({
-        next: (response) => {
-          studentIdd = response;
-          console.log('Student ID is:', studentIdd);
-        },
-        error: (err) => {
+    
+      const studentId$ = this.studentSubjectService.getStudentId(this.studentName).pipe(
+        catchError(err => {
           console.error('Failed to get student ID:', err);
-        }
-      });
-
-      let subjectIdd: number =0;
-
-
-      this.studentSubjectService.getSubjectId(this.subjectName).subscribe({
-        next: (response) => {
-          subjectIdd = response;
-          console.log('Subject ID is:', subjectIdd);
-        },
-        error: (err) => {
+          alert('Error fetching student ID.');
+          return of(-1);  // Return a fallback value so forkJoin can continue
+        })
+      );
+    
+      const subjectId$ = this.studentSubjectService.getSubjectId(this.subjectName).pipe(
+        catchError(err => {
           console.error('Failed to get subject ID:', err);
-          return;
-        }
-      });
+          alert('Error fetching subject ID.');
+          return of(-1);  // Return a fallback value so forkJoin can continue
+        })
+      );
 
-      console.log(studentIdd+"hehehehehehehehehe"+subjectIdd)
-      this.newStudentSubject = { studentId: studentIdd, subjectId: subjectIdd };
-      console.log(this.newStudentSubject+"jjjjjjjjjjjjjjjjjjjjjjjj")
-      
-      this.studentSubjectService.addStudentSubject(this.newStudentSubject).subscribe({
-        next: (response) => {
-          alert("Subject successfully added!");
-          this.newStudentSubject = {studentId: 0, subjectId: 0};
-          this.loadStudentSubjects();
+      forkJoin([studentId$, subjectId$]).subscribe({
+        next: ([studentId, subjectId]) => {
+          if (studentId === -1 || subjectId === -1) {
+            alert('Could not add: missing student or subject.');
+            return;
+          }
+          console.log('Student ID is:', studentId);
+          console.log('Subject ID is:', subjectId);
+    
+          this.newStudentSubject = { studentId: studentId, subjectId: subjectId };
+          console.log('New StudentSubject:', this.newStudentSubject);
+    
+          this.studentSubjectService.addStudentSubject(this.newStudentSubject).subscribe({
+            next: (response) => {
+              alert("Subject successfully added!");
+              this.newStudentSubject = { studentId: 0, subjectId: 0 };
+              this.loadStudentSubjects();
+            },
+            error: (err) => {
+              alert("Failed to add subject: " + err.message);
+            }
+          });
         },
         error: (err) => {
-          alert("Failed to add subject: " + err.message);
+          console.error('Failed to get student or subject ID:', err);
+        }
+      });
+    }
+
+    deleteStudentSubject(studentSubjectId: number){
+      console.log("hehehehee"+studentSubjectId);
+      if (!confirm('Are you sure you want to delete this student?')) {
+        return;
+      }
+  
+      this.studentSubjectService.deleteStudentSubject(studentSubjectId).subscribe({
+        next: () => {
+          alert('Assignation deleted successfully.');
+          this.loadStudentSubjects(); 
+          
+        },
+        error: (err: any) => {
+          console.error('Failed to delete student subject:', err);
+          alert('Failed to delete student subject.');
         }
       });
     }

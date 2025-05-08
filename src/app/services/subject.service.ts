@@ -23,7 +23,10 @@ export class SubjectService {
   }
 
   addSubject(subject: Subject): Observable<Subject> {
-      
-      return this.http.post<Subject>(`${this.apiUrl}/add`, subject);
-    }
+    return this.http.post<Subject>(`${this.apiUrl}/add`, subject);
+  }
+
+  deleteSubject(subjectId: number){
+    return this.http.delete(`${this.apiUrl}/delete/${subjectId}`)
+  }
 }

@@ -26,5 +26,6 @@
 <ul>
   <li *ngFor="let student of students">
     <div>{{ student.name || 'No name' }}</div> - Age: {{ student.age || 'N/A' }} - DOB: {{ student.dob || 'N/A' }} - Address: {{ student.address || 'N/A' }}
+    <button (click)="deleteStudent(student.id)">Delete</button>
   </li>
 </ul>

@@ -48,4 +48,22 @@ export class SubjectListComponent implements OnInit {
       });
     }
 
+    deleteSubject(subjectId: number){
+      if (!confirm('Are you sure you want to delete this student?')) {
+        return;
+      }
+  
+      this.subjectService.deleteSubject(subjectId).subscribe({
+        next: () => {
+          alert('Student deleted successfully.');
+          this.loadSubjects(); 
+          
+        },
+        error: (err: any) => {
+          console.error('Failed to delete student:', err);
+          alert('Failed to delete student.');
+        }
+      });
+    }
+
 }

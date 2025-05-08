@@ -30,10 +30,14 @@ export class StudentsubjectService {
     }
 
     getStudentId(studentName: string): Observable<any>{
-      return this.http.get(`${this.apiUrl}/findstudent/${studentName}`);
+      return this.http.get<number>(`${this.apiUrl}/findstudent/${studentName}`);
     }
 
     getSubjectId(subjectName: string): Observable<any>{
-      return this.http.get(`${this.apiUrl}/findsubject/${subjectName}`);
+      return this.http.get<number>(`${this.apiUrl}/findsubject/${subjectName}`);
+    }
+
+    deleteStudentSubject(studentSubjectId: number){
+      return this.http.delete(`${this.apiUrl}/delete/${studentSubjectId}`)
     }
 }

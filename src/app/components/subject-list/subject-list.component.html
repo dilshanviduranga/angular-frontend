@@ -14,5 +14,6 @@
 <ul>
   <li *ngFor="let subject of subjects">
     {{ subject.id}} - {{ subject.subjectName}}
+    <button (click)="deleteSubject(subject.id)">Delete</button>
   </li>
 </ul>
