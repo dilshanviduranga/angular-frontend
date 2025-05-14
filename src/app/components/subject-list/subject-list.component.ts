@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { StudentService } from '../../services/student.service';
 import { Subject, SubjectService } from '../../services/subject.service';
 import { FormsModule } from '@angular/forms';
+import { StudentEventService } from '../../services/student-subject-event.service';
 
 @Component({
   selector: 'app-subject-list',
@@ -10,12 +10,14 @@ import { FormsModule } from '@angular/forms';
   imports: [FormsModule, NgFor, NgIf, CommonModule], 
   templateUrl: './subject-list.component.html',
 })
-export class SubjectListComponent implements OnInit {
+export class SubjectListComponent implements OnInit{
   subjects: any[] = [];
   newSubject: Subject = { subjectName: '' };
   editingSubjectId: number | null = null;
 
-  constructor(private subjectService: SubjectService) {}
+  constructor(private subjectService: SubjectService,
+              private studentEventService: StudentEventService
+  ) {}
 
   ngOnInit(): void {
     this.loadSubjects();
@@ -58,6 +60,7 @@ export class SubjectListComponent implements OnInit {
         next: () => {
           alert('Student deleted successfully.');
           this.loadSubjects(); 
+          this.studentEventService.notifySubjectListChanged();
           
         },
         error: (err: any) => {
@@ -66,17 +69,6 @@ export class SubjectListComponent implements OnInit {
         }
       });
     }
-
-
-
-
-
-
-
-
-
-
-
 
     startEdit(subject: any): void {
       this.editingSubjectId = subject.id;
@@ -90,10 +82,10 @@ export class SubjectListComponent implements OnInit {
       this.subjectService.updateSubject(subject.id, subject).subscribe({
         next: () => {
           alert('Subject updated successfully.');
-          this.editingSubjectId = null;  // Exit edit mode
+          this.editingSubjectId = null;
+          this.studentEventService.notifySubjectListChanged();
         },
         error: (err: any) => {
-          console.log(subject.id +"ffffffff"+subject.subjectName);
           console.error('Failed to update subject:', err);
           alert('Failed to update subject.');
         }

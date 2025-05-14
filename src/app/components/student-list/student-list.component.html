@@ -5,10 +5,6 @@
         <input [(ngModel)]="newStudent.name" name="name" required>
     </div>
     <div>
-        <label>Age:</label> 
-        <input [(ngModel)]="newStudent.age" name="age" type="number" required>  
-    </div>
-    <div>
         <label>DOB:</label> 
         <input [(ngModel)]="newStudent.dob" name="dob" type="date" required>    
     </div>
@@ -25,17 +21,18 @@
 <ul>
     <li *ngFor="let student of students">
       <div *ngIf="editingStudentId !== student.id">
-        {{ student.name || 'No name' }} -
-        Age: {{ student.age || 'N/A' }} -
-        DOB: {{ student.dob || 'N/A' }} -
-        Address: {{ student.address || 'N/A' }}
-        <button (click)="startEdit(student)">Edit</button>
-        <button (click)="deleteStudent(student.id)">Delete</button>
+         <div style="font-size: 20px;"><strong>{{ student.name || 'No name' }}</strong></div>
+        <div style="padding-left: 20px;"><strong>Age:</strong> {{ student.age || 'N/A' }}</div>
+        <div style="padding-left: 20px;"><strong>DOB:</strong> {{ student.dob | date }}</div>
+        <div style="padding-left: 20px;"><strong>Address:</strong> {{ student.address || 'N/A' }}</div>
+        <div style="margin-left: 50px;">
+            <button (click)="startEdit(student)">Edit</button>
+            <button (click)="deleteStudent(student.id)">Delete</button>
+        </div>
       </div>
   
       <div *ngIf="editingStudentId === student.id">
         <input [(ngModel)]="student.name" placeholder="Name" name="name">
-        <input type="number" [(ngModel)]="student.age" placeholder="Age" name="age">
         <input type="date" [(ngModel)]="student.dob" placeholder="DOB" name="dob">
         <input [(ngModel)]="student.address" placeholder="Address" name="address">
         <button (click)="saveEdit(student)">Save</button>

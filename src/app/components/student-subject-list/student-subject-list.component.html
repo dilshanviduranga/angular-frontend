@@ -22,7 +22,6 @@
     </div>
 
     <div *ngIf="editingStudentSubjectId === studentSubject.id">
-      <!-- Replace with dropdowns if you want to select from existing students/subjects -->
       <input [(ngModel)]="studentSubject.studentName" placeholder="Student Name">
       <input [(ngModel)]="studentSubject.subjectName" placeholder="Subject Name">
       <button (click)="saveEdit(studentSubject)">Save</button>

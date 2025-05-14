@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Student, StudentService } from '../../services/student.service';
 import { FormsModule } from '@angular/forms';
+import { StudentsubjectService } from '../../services/studentsubject.service';
+import { StudentEventService } from '../../services/student-subject-event.service';
 
 @Component({
   selector: 'app-student-list',
@@ -14,7 +16,8 @@ export class StudentListComponent implements OnInit {
   newStudent: Student = { name: '', age: 0, dob: new Date(), address: '' };
   editingStudentId: number | null = null;  
 
-  constructor(private studentService: StudentService) {}
+  constructor(private studentService: StudentService , 
+  private studentEventService: StudentEventService) {}
 
   ngOnInit(): void {
     this.loadStudents();
@@ -32,10 +35,24 @@ export class StudentListComponent implements OnInit {
     
   
   addStudent(): void {
-    if (!this.newStudent.name.trim() || this.newStudent.age <= 0 || !this.newStudent.dob || !this.newStudent.address.trim()) {
+
+
+    if (!this.newStudent.name.trim() || !this.newStudent.dob || !this.newStudent.address.trim()) {
       alert("All fields are required and must be valid!");
       return;
     }
+    let dobb = new Date(this.newStudent.dob);
+    const today = new Date();
+    this.newStudent.age = today.getFullYear() - dobb.getFullYear();
+    const monthDiff = today.getMonth() - dobb.getMonth();
+    const dayDiff = today.getDate() - dobb.getDate();
+
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+    this.newStudent.age--;
+   }
+
+
+
     this.studentService.addStudent(this.newStudent).subscribe({
       next: (response) => {
         alert("Student successfully added!");
@@ -57,7 +74,8 @@ export class StudentListComponent implements OnInit {
     this.studentService.deleteStudent(studentId).subscribe({
       next: () => {
         alert('Student deleted successfully.');
-        this.loadStudents(); 
+        this.loadStudents();
+        this.studentEventService.notifyStudentListChanged(); 
         
       },
       error: (err) => {
@@ -79,7 +97,8 @@ export class StudentListComponent implements OnInit {
     this.studentService.updateStudent(student.id, student).subscribe({
       next: () => {
         alert('Student updated successfully.');
-        this.editingStudentId = null;  // Exit edit mode
+        this.editingStudentId = null;
+        this.studentEventService.notifyStudentListChanged();
       },
       error: (err: any) => {
         console.error('Failed to update student:', err);

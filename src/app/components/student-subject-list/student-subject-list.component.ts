@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { StudentSubject, StudentsubjectService } from '../../services/studentsubject.service';
 import { FormsModule } from '@angular/forms';
-import { catchError, forkJoin, of } from 'rxjs';
+import { catchError, forkJoin, of, Subscription } from 'rxjs';
+import { StudentEventService } from '../../services/student-subject-event.service';
 // import { ConsoleReporter } from 'jasmine';
 
 @Component({
@@ -12,17 +13,31 @@ import { catchError, forkJoin, of } from 'rxjs';
   templateUrl: './student-subject-list.component.html',
   styleUrl: './student-subject-list.component.css'
 })
-export class StudentSubjectListComponent {
+export class StudentSubjectListComponent implements OnInit, OnDestroy {
+  private subscription!: Subscription;
   studentSubjects: any[] = [];
   newStudentSubject: StudentSubject = { studentId: 0, subjectId: 0}
   studentName : string = "";
   subjectName : string = "";
   editingStudentSubjectId: number | null = null;
   
-    constructor(private studentSubjectService: StudentsubjectService) {}
+    constructor(private studentSubjectService: StudentsubjectService,
+                private studentEventService: StudentEventService
+    ) {}
   
     ngOnInit(): void {
+      this.subscription = this.studentEventService.studentListChanged$.subscribe(() => {
+        this.loadStudentSubjects();
+      })
+
+      this.subscription = this.studentEventService.subjectListChanged$.subscribe(() => {
+        this.loadStudentSubjects();
+      })
       this.loadStudentSubjects();
+    }
+
+    ngOnDestroy() {
+    this.subscription.unsubscribe();
     }
   
     loadStudentSubjects(): void {
@@ -73,6 +88,8 @@ export class StudentSubjectListComponent {
             next: (response) => {
               alert("Subject successfully added!");
               this.newStudentSubject = { studentId: 0, subjectId: 0 };
+              this.studentName = "";
+              this.subjectName = "";
               this.loadStudentSubjects();
             },
             error: (err) => {
@@ -87,7 +104,6 @@ export class StudentSubjectListComponent {
     }
 
     deleteStudentSubject(studentSubjectId: number){
-      console.log("hehehehee"+studentSubjectId);
       if (!confirm('Are you sure you want to delete this student?')) {
         return;
       }
@@ -105,15 +121,6 @@ export class StudentSubjectListComponent {
       });
     }
 
-
-
-
-
-
-
-
-
-
     startEdit(studentSubject: any): void {
       this.editingStudentSubjectId = studentSubject.id;
     }
@@ -123,10 +130,9 @@ export class StudentSubjectListComponent {
     }
     
     saveEdit(studentSubject: any): void {
-      // You probably want to send the studentId and subjectId (not just names)
       const updatedStudentSubject = {
         id: studentSubject.id,
-        studentName: studentSubject.studentName,  // You may need to look these up by name
+        studentName: studentSubject.studentName,
         subjectName: studentSubject.subjectName
       };
     
@@ -136,7 +142,6 @@ export class StudentSubjectListComponent {
           this.editingStudentSubjectId = null;
         },
         error: (err: any) => {
-          console.log(studentSubject.id +"heeeeeee"+ updatedStudentSubject.studentName +" eeeeeh"+updatedStudentSubject.subjectName);
           console.error('Failed to update student-subject:', err);
           alert('Failed to update student-subject.');
         }
